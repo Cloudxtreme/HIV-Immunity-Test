@@ -572,14 +572,14 @@ namespace HIV_Immunity_Test
             if (dialog.ShowDialog(this) == DialogResult.OK)
             {
                 hivimmune_match.Clear();
-                int hiv_immune = checkHIVImmunity(dialog.FileName, hivimmune_pos, "3");
+                int hiv_immune = checkHIVImmunity(dialog.FileName, hivimmune_pos, "3", "i3003626","DD");
                 if(hiv_immune==RESULT_TRUE)
                 {
                     MessageBox.Show("You are almost completely immune to infection by HIV");
                 }
                 else if (hiv_immune == RESULT_PROB_TRUE)
                 {
-                    MessageBox.Show("You may be immune to infection by HIV, but I cannot confirm it due to insufficient information in your autosomal file.");
+                    MessageBox.Show("You may be completely immune to infection by HIV, but I cannot confirm it due to insufficient information in your autosomal file. ");
                 }
                 else if (hiv_immune == RESULT_FALSE)
                 {
@@ -592,7 +592,7 @@ namespace HIV_Immunity_Test
             }
         }
 
-        private int checkHIVImmunity(string file, Dictionary<string, string> ibd_gt_ref, string chr)
+        private int checkHIVImmunity(string file, Dictionary<string, string> ibd_gt_ref, string chr, string rsid,string target_gt)
         {
             List<string> match = new List<string>();
             string text = getAutosomalText(file);
@@ -621,6 +621,14 @@ namespace HIV_Immunity_Test
                 {
                     //stmp.Append(line);
                     //stmp.Append("\r\n");                    
+
+                    if (data[0] == rsid)
+                    {
+                        if (data[3] == target_gt)
+                            return RESULT_TRUE;
+                        else
+                            return RESULT_FALSE;
+                    }
 
                     if (ibd_gt_ref.ContainsKey(data[0]))
                     {
